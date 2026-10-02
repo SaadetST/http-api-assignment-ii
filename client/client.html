@@ -8,7 +8,7 @@
     const handleResponse = (response, parseResponse) => {
       const content = document.querySelector('#content');
 
-      // Various status codes 
+      // message for each status code
       switch (response.status) {
         case 200:
           content.innerHTML = '<b>Success</b>';
