@@ -20,6 +20,8 @@
     "test": "echo \"Tests complete\""
   },
   "devDependencies": {
-    "eslint": "^10.11.0"
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.11.0",
+    "globals": "^17.13.0"
   }
 }
