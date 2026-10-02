@@ -5,6 +5,98 @@
   <link rel="stylesheet" type="text/css" href="/style.css">
   
   <script>
+    const handleResponse = (response, parseResponse) => {
+      const content = document.querySelector('#content');
+
+      switch (response.status) {
+        case 200:
+          content.innerHTML = '<b>Success</b>';
+          break;
+        case 201:
+          content.innerHTML = '<b>Create</b>';
+          break;
+        case 204:
+          content.innerHTML = '<b>Updated (No Content)</b>';
+          break;
+        case 400:
+          content.innerHTML = '<b>Bad Request</b>';
+          break;
+        case 404:
+          content.innerHTML = '<b>Not Found</b>';
+          break;
+        default:
+          content.innerHTML = '<b>Error code not implemented by client.</b>';
+          break;
+      }
+
+      if (parseResponse) {
+
+        response.json().then((obj) => {
+          console.log(obj);
+          if (obj.message) {
+            content.innerHTML += `<p>Message: ${obj.message}</p>`;
+          }
+          if (obj.users) {
+            content.innerHTML += `<p>${JSON.stringify(obj.users)}</p>`;
+          }
+        });
+      }
+    };
+
+    const requestUpdate = (e, userForm) => {
+      e.preventDefault();
+
+      const url = userForm.querySelector('#urlField').value;
+      const method = userForm.querySelector('#methodSelect').value;
+
+      fetch(url, {
+        method: method,
+        headers: {
+          'Accept': 'application/json',
+        },
+      }).then((response) => {
+        if (method === 'head') {
+          handleResponse(response, false);
+        } else {
+          handleResponse(response, true);
+        }
+      });
+    };
+
+    const sendPost = (e, nameForm) => {
+
+      const action = nameForm.getAttribute('action');
+      const method = nameForm.getAttribute('method');
+      const name = document.querySelector('#nameField').value;
+      const age = document.querySelector('#ageField').value;
+
+      const formData = `name=${name}&age=${age}`;
+
+      fetch(action, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json',
+        },
+        body: formData,
+      }).then((response) => {
+        if (response.status === 204) {
+          handleResponse(response, false);
+        } else {
+          handleResponse(response, true);
+        }
+      });
+    };
+
+    const init = () => {
+      const userForm = document.querySelector('#userForm');
+      const nameForm = document.querySelector('#nameForm');
+
+      userForm.addEventListener('submit', (e) => requestUpdate(e, userForm));
+      nameForm.addEventListener('submit', (e) => sendPost(e, nameForm));
+    };
+
+    window.onload = init;
 
   </script>
 </head>
