@@ -7,8 +7,10 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 const index = fs.readFileSync(`${__dirname}/../client/client.html`);
 const css = fs.readFileSync(`${__dirname}/../client/style.css`);
 
+// data that will update and grow as user makes inputs
 const users = {};
 
+// Writes the response for specific requests
 const respond = (request, response, status, type, content) => {
   response.writeHead(status, { 'Content-Type': type });
 
@@ -42,6 +44,7 @@ const notFound = (request, response) => {
   });
 };
 
+// updates the users data as needed
 const addUser = (request, response) => {
   const body = [];
 
@@ -76,10 +79,12 @@ const addUser = (request, response) => {
   });
 };
 
+// handles requests
 const onRequest = (request, response) => {
   const parsedUrl = new URL(request.url, 'http://${request.headers.host}');
   const path = parsedUrl.pathname;
 
+  // handles POST
   if (request.method === 'POST') {
     if (path === '/addUser') {
       return addUser(request, response);
@@ -87,6 +92,7 @@ const onRequest = (request, response) => {
     return notFound(request, response);
   }
 
+  // handles GET and HEAD
   switch (path) {
     case '/':
       return getIndex(request, response);

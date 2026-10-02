@@ -8,6 +8,7 @@
     const handleResponse = (response, parseResponse) => {
       const content = document.querySelector('#content');
 
+      // Various status codes 
       switch (response.status) {
         case 200:
           content.innerHTML = '<b>Success</b>';
@@ -29,8 +30,9 @@
           break;
       }
 
+      // Prints the object into console
+      // Prints the message onto the page
       if (parseResponse) {
-
         response.json().then((obj) => {
           console.log(obj);
           if (obj.message) {
@@ -43,9 +45,8 @@
       }
     };
 
+    //updates the request with button clicks
     const requestUpdate = (e, userForm) => {
-      e.preventDefault();
-
       const url = userForm.querySelector('#urlField').value;
       const method = userForm.querySelector('#methodSelect').value;
 
@@ -63,6 +64,7 @@
       });
     };
 
+    // Sends the value user put in to the server to store it
     const sendPost = (e, nameForm) => {
 
       const action = nameForm.getAttribute('action');
@@ -97,7 +99,6 @@
     };
 
     window.onload = init;
-
   </script>
 </head>
 <body>
